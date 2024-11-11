@@ -18,3 +18,11 @@ To run as root
 ```
 sudo cshell
 ```
+
+Uninstallation
+```
+sudo rm /usr/bin/cshell
+```
+
+
+For users having problem with `sudo su` can use this package and run `sudo cshell` to launch a root shell.
