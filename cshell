@@ -1,0 +1,45 @@
+#!/usr/bin/python3
+
+import cmd
+import os
+import subprocess
+from datetime import datetime
+
+class CShell(cmd.Cmd):
+	intro='Starting CryptaneShell. More details available at https://github.com/AdityaMitra5102/CryptaneSHELL'
+	prompt='$'
+
+	def preloop(self):
+		self.get_pwd()
+
+	def get_pwd(self):
+		user=subprocess.run(['whoami'], capture_output=True, text=True)
+		currdir=subprocess.run(['pwd'], capture_output=True, text=True)
+		dtm=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+		MyShell.prompt=dtm+'---'+user.stdout[:-1]+'@'+currdir.stdout[:-1]+'$'
+
+
+	def do_exit(self, args):
+		return True
+
+	def do_cd(self, args):
+		if args:
+			try:
+				os.chdir(args)
+				self.get_pwd()
+			except FileNotFoundError:
+				print('Director not found')
+
+	def default(self, line):
+		try:
+			subprocess.run(line, shell=True)
+		except FileNotFoundError:
+			print("Command not found")
+		self.get_pwd()
+
+	def emptyline(self):
+		self.get_pwd()
+
+
+if __name__=='__main__':
+	CShell().cmdloop()
